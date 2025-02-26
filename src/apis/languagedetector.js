@@ -37,8 +37,6 @@ const initializeLanguageDetector = async () => {
         throw new Error("Language detector is not available.");
       }
       const [bestResult] = await detector.detect(text);
-  
-      // Check if the detection result is reliable
       if (bestResult.detectedLanguage === "und" || bestResult.confidence < 0.4) {
         throw new Error("Language detection result is unreliable.");
       }
@@ -49,6 +47,12 @@ const initializeLanguageDetector = async () => {
     }
   };
   
+  // Test the function
+  const text = "Hollo my dearest mother";
+  detectLanguage(text).then((language) => {
+    console.log(`Detected language: ${language}`);
+  });
+
 const summarizeText = async (text) => {
     if (!("ai" in self) || !("summarizer" in self.ai)) {
         console.warn("Summarizer API is not available.");
@@ -72,7 +76,6 @@ const summarizeText = async (text) => {
         }
 
         let summarizer;
-
         if (canSummarize === "after-download") {
             summarizer = await self.ai.summarizer.create({
                 monitor(m) {
@@ -117,12 +120,12 @@ const checkLanguagePairSupport = async (sourceLanguage, targetLanguage) => {
     try {
       // Check language pair support
       const languagePairAvailability = await checkLanguagePairSupport(sourceLanguage, targetLanguage);
+  
       if (languagePairAvailability === "no") {
         throw new Error("Translation is not supported for the selected language pair.");
       }
   
       let translator;
-  
       if (languagePairAvailability === "after-download") {
         translator = await self.ai.translator.create({
           sourceLanguage,
@@ -148,14 +151,13 @@ const checkLanguagePairSupport = async (sourceLanguage, targetLanguage) => {
 
   const translateText = async (text, targetLanguage) => {
     try {
+      // Detect the source language of the text
       const sourceLanguage = await detectLanguage(text);
-  
       if (sourceLanguage === "Unknown") {
         throw new Error("Could not detect source language.");
       }
       const translator = await initializeTranslator(sourceLanguage, targetLanguage);
       const translatedText = await translator.translate(text);
-
       return translatedText;
     } catch (err) {
       console.error("Translation failed:", err);

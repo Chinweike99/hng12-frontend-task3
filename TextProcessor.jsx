@@ -27,13 +27,6 @@ const TextProcessor = () => {
     console.warn("Translator API is not supported.");
   }
 
-  // Test the function
-  const text = "Hollo my dearest mother";
-  detectLanguage(text).then((language) => {
-    console.log(`Detected language: ${language}`);
-  });
-
-  // Detect language when output text changes
   useEffect(() => {
     if (outputText) {
       detectLanguage(outputText).then((language) =>
@@ -47,12 +40,9 @@ const TextProcessor = () => {
       setError("Please enter some text.");
       return;
     }
-
     setError("");
     setOutputText(inputText);
-
     try {
-      // Detect the language of the input text
       const language = await detectLanguage(inputText);
       setDetectedLanguage(language);
     } catch (err) {
@@ -85,7 +75,7 @@ const TextProcessor = () => {
         const summarized = await summarizeText(outputText);
         setSummary(summarized);
         if(!summarized){
-            setSummary("Summarization is not available.")
+            setError("Summarization is not available.")
         }
     } catch (error) {
         console.error("Summerization failed:", error);
