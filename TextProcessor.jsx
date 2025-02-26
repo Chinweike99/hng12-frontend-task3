@@ -84,6 +84,16 @@ const TextProcessor = () => {
     setSummary(summarized);
   };
 
+  
+  // Handle Enter key press
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+
   return (
     <div className="container">
       <div className="Textprocessor-container">
@@ -166,6 +176,7 @@ const TextProcessor = () => {
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="Type or paste text here..."
                 aria-label="Input text for processing"
+                onKeyDown={handleKeyDown}
               />
               <button className="send-button" onClick={handleSend}>
                 Send
