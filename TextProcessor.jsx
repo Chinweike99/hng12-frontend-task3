@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   detectLanguage,
   summarizeText,
@@ -13,6 +13,7 @@ const TextProcessor = () => {
   const [targetLanguage, setTargetLanguage] = useState("en");
   const [summary, setSummary] = useState("");
   const [error, setError] = useState("");
+  const messagesEndRef = useRef(null);
 
   if ("ai" in self && "languageDetector" in self.ai) {
     console.log("Language Detector API is available!");
@@ -84,7 +85,15 @@ const TextProcessor = () => {
     setSummary(summarized);
   };
 
-  
+
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [outputText]);
+
   // Handle Enter key press
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
