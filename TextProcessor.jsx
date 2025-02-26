@@ -81,8 +81,16 @@ const TextProcessor = () => {
   };
 
   const handleSummarize = async () => {
-    const summarized = await summarizeText(outputText);
-    setSummary(summarized);
+    try {
+        const summarized = await summarizeText(outputText);
+        setSummary(summarized);
+        if(!summarized){
+            setSummary("Summarization is not available.")
+        }
+    } catch (error) {
+        console.error("Summerization failed:", error);
+      setError("Failed to summarize text..");
+    }
   };
 
 
