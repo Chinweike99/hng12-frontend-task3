@@ -85,7 +85,7 @@ const TextProcessor = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="container">
       <div className="Textprocessor-container">
         <header>
           <h1>AI Text Processor</h1>
